@@ -1,6 +1,6 @@
 /************************************************************************
  *
- * $Id: geos_c.h.in,v 1.11.2.1 2005/11/29 17:51:15 strk Exp $
+ * $Id: geos_c.h.in,v 1.11.2.3 2006/03/27 09:05:19 strk Exp $
  *
  * C-Wrapper for GEOS library
  *
@@ -39,18 +39,18 @@ extern "C" {
 
 #define GEOS_VERSION_MAJOR 2
 #define GEOS_VERSION_MINOR 2
-#define GEOS_VERSION_PATCH 1
+#define GEOS_VERSION_PATCH 2
 #define GEOS_FIRST_INTERFACE GEOS_VERSION_MAJOR 
 #define GEOS_LAST_INTERFACE (GEOS_VERSION_MAJOR+GEOS_VERSION_MINOR)
-#define GEOS_VERSION "2.2.1"
+#define GEOS_VERSION "2.2.2"
 #define GEOS_JTS_PORT "1.4.1"
 
 #define GEOS_CAPI_VERSION_MAJOR 1
-#define GEOS_CAPI_VERSION_MINOR 0
-#define GEOS_CAPI_VERSION_PATCH 1
+#define GEOS_CAPI_VERSION_MINOR 1
+#define GEOS_CAPI_VERSION_PATCH 0
 #define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR 
 #define GEOS_CAPI_LAST_INTERFACE (GEOS_CAPI_VERSION_MAJOR+GEOS_CAPI_VERSION_MINOR)
-#define GEOS_CAPI_VERSION "2.2.1-CAPI-1.0.1"
+#define GEOS_CAPI_VERSION "2.2.2-CAPI-1.1.0"
 
  
 /************************************************************************
@@ -211,6 +211,7 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeom g);
  *
  ***********************************************************************/
 
+extern GEOSGeom GEOS_DLL GEOSEnvelope(const GEOSGeom g1);
 extern GEOSGeom GEOS_DLL GEOSIntersection(const GEOSGeom g1, const GEOSGeom g2);
 extern GEOSGeom GEOS_DLL GEOSBuffer(const GEOSGeom g1,
 	double width, int quadsegs);
@@ -263,6 +264,9 @@ extern char GEOS_DLL GEOSHasZ(const GEOSGeom g1);
  *  Geometry info
  *
  ***********************************************************************/
+
+/* Return NULL on exception. Return must be freed by caller. */
+extern char GEOS_DLL *GEOSGeomType(const GEOSGeom g1);
 
 /* Return -1 on exception */
 extern int GEOS_DLL GEOSGeomTypeId(const GEOSGeom g1);
@@ -320,6 +324,8 @@ extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeom g);
  ***********************************************************************/
 
 /* Return 0 on exception, 1 otherwise */
+extern int GEOS_DLL GEOSArea(const GEOSGeom g1, double *area);
+extern int GEOS_DLL GEOSLength(const GEOSGeom g1, double *length);
 extern int GEOS_DLL GEOSDistance(const GEOSGeom g1, const GEOSGeom g2,
 	double *dist);
 

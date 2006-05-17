@@ -1,3 +1,21 @@
+Changes in 2.2.2
+
+- Added LinearRing::clone
+- Added GEOSArea(), GEOSLength(), GEOSEnvelope(), and GEOSGeomType() to C API
+- Cleanups in C-API
+- Support for gcc-4
+- Fixed Polygon::equalsExact
+- Improved XMLTester
+- Fixed bug in NULL-factory Geometry constructor
+- Cleanups in SWIG wrappers
+- New Ruby bindings
+- Enumerated SweepLineEvent's DELETE and INSERT labels
+  renamed to DELETE_EVENT and INSERT_EVENT.
+- Fixed geos-config to use system-specific libs path
+- Accept correct WKT format for MultiPoints
+- SRID support in (E)WKB reader.
+- Support builds with win32 SDK
+
 Changes in 2.2.1
 
 - Support for MingW builds
