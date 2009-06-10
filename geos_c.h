@@ -1,6 +1,6 @@
 /************************************************************************
  *
- * $Id: geos_c.h.in 2251 2009-01-20 01:01:24Z pramsey $
+ * $Id: geos_c.h.in 2582 2009-06-16 00:04:28Z pramsey $
  *
  * C-Wrapper for GEOS library
  *
@@ -21,9 +21,8 @@
  *	  functions, and call finishGEOS() when done.
  *
  *	- Currently you have to explicitly GEOSGeom_destroy() all
- *	  GEOSGeom objects to avoid memory leaks, and to free()
- *	  all returned char * (unless const). This might change
- *	  before first release to ensure greater API stability.
+ *	  GEOSGeom objects to avoid memory leaks, and to GEOSFree()
+ *	  all returned char * (unless const). 
  *
  ***********************************************************************/
 
@@ -31,7 +30,10 @@
 #define GEOS_C_H_INCLUDED
 
 #ifndef __cplusplus
-# include <stddef.h> /* for size_t definition */
+#include <stddef.h> /* for size_t definition */
+#else 
+#include <cstddef> 
+using std::size_t; 
 #endif
 
 #ifdef __cplusplus
@@ -51,9 +53,9 @@ extern "C" {
 #if defined(_MSC_VER)
 #include <geos/version.h>
 #define GEOS_CAPI_VERSION_MAJOR 1
-#define GEOS_CAPI_VERSION_MINOR 5
+#define GEOS_CAPI_VERSION_MINOR 6
 #define GEOS_CAPI_VERSION_PATCH 0
-#define GEOS_CAPI_VERSION "3.1.0-CAPI-1.5.0"
+#define GEOS_CAPI_VERSION "3.1.1-CAPI-1.6.0"
 #else
 #ifndef GEOS_VERSION_MAJOR
 #define GEOS_VERSION_MAJOR 3
@@ -62,19 +64,19 @@ extern "C" {
 #define GEOS_VERSION_MINOR 1
 #endif
 #ifndef GEOS_VERSION_PATCH
-#define GEOS_VERSION_PATCH 0
+#define GEOS_VERSION_PATCH 1
 #endif
 #ifndef GEOS_VERSION
-#define GEOS_VERSION "3.1.0"
+#define GEOS_VERSION "3.1.1"
 #endif
 #ifndef GEOS_JTS_PORT
 #define GEOS_JTS_PORT "1.7.1"
 #endif
 
 #define GEOS_CAPI_VERSION_MAJOR 1
-#define GEOS_CAPI_VERSION_MINOR 5
+#define GEOS_CAPI_VERSION_MINOR 6
 #define GEOS_CAPI_VERSION_PATCH 0
-#define GEOS_CAPI_VERSION "3.1.0-CAPI-1.5.0"
+#define GEOS_CAPI_VERSION "3.1.1-CAPI-1.6.0"
 #endif
 
 #define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR 
@@ -591,12 +593,12 @@ extern int GEOS_DLL GEOSGeomTypeId_r(GEOSContextHandle_t handle,
 /* Return 0 on exception */
 extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g1);
 
-extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
+extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int srid);
 
 extern int GEOS_DLL GEOSGetSRID_r(GEOSContextHandle_t handle,
                                   const GEOSGeometry* g1);
 
-extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
+extern void GEOS_DLL GEOSSetSRID_r(GEOSContextHandle_t handle, GEOSGeometry* g, int srid);
 
 /* May be called on all geometries in GEOS 3.x, returns -1 on error and 1
  * for non-multi geometries. Older GEOS versions only accept 
@@ -820,6 +822,12 @@ extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID_r(GEOSContextHandle_t handle,
                                    GEOSWKBWriter* writer, const char writeSRID);
 
 
+/*
+ * Free buffers returned by stuff like GEOSWKBWriter_write(), 
+ * GEOSWKBWriter_writeHEX() and GEOSWKTWriter_write(). 
+ */
+extern void GEOS_DLL GEOSFree( void *buffer );
+extern void GEOS_DLL GEOSFree_r( GEOSContextHandle_t handle, void *buffer );
 
 #ifdef __cplusplus
 } // extern "C"
