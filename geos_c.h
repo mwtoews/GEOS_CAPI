@@ -1,6 +1,6 @@
 /************************************************************************
  *
- * $Id: geos_c.h.in 2223 2008-11-18 18:56:08Z pramsey $
+ * $Id: geos_c.h.in 2585 2009-06-16 00:36:33Z pramsey $
  *
  * C-Wrapper for GEOS library
  *
@@ -51,19 +51,19 @@ extern "C" {
 #if defined(_MSC_VER)
 #include <geos/version.h>
 #define GEOS_CAPI_VERSION_MAJOR 1
-#define GEOS_CAPI_VERSION_MINOR 4
-#define GEOS_CAPI_VERSION_PATCH 2
-#define GEOS_CAPI_VERSION "3.0.3-CAPI-1.4.2"
+#define GEOS_CAPI_VERSION_MINOR 5
+#define GEOS_CAPI_VERSION_PATCH 1
+#define GEOS_CAPI_VERSION "3.0.4-CAPI-1.5.1"
 #else
 #define GEOS_VERSION_MAJOR 3
 #define GEOS_VERSION_MINOR 0
-#define GEOS_VERSION_PATCH 3
-#define GEOS_VERSION "3.0.3"
+#define GEOS_VERSION_PATCH 4
+#define GEOS_VERSION "3.0.4"
 #define GEOS_JTS_PORT "1.7.1"
 #define GEOS_CAPI_VERSION_MAJOR 1
-#define GEOS_CAPI_VERSION_MINOR 4
-#define GEOS_CAPI_VERSION_PATCH 2
-#define GEOS_CAPI_VERSION "3.0.3-CAPI-1.4.2"
+#define GEOS_CAPI_VERSION_MINOR 5
+#define GEOS_CAPI_VERSION_PATCH 1
+#define GEOS_CAPI_VERSION "3.0.4-CAPI-1.5.1"
 #endif 
 
 #define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR 
