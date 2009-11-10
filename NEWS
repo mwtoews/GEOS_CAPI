@@ -1,11 +1,19 @@
-Changes in 3.1.1
+Changes in 3.2.0 
 
-- Bug fixes
-  - Calculations in Octant
-  - Packaging fixes
-  - Memory leaks
-  - Buffer build for multipolygons
-
+- Add Single-sided buffer operation
+- JTS-1.10 sync ...
+  - Drastically improved Buffer speed (20x for a case in testsuite)
+  - Improved EdgeList duplicate edge finding
+  - Added algorithm::distance package
+  - Added algorithm::Angle class
+  - Added algorithm::BoundaryNodeRule class
+  - IsSimpleOp can now return non-simple location coordinate
+  - DistanceOp can now check for 'within distance' predicate
+    (earlier exit)
+  - MultiPolygon::getBoundary always return MultiLineString, also
+    when the result is the EMPTY geometry.
+- Various bug and leak fixes, optimizations
+- Replace MarkupSTL with tinyXML
 
 Changes in 3.1.0
 

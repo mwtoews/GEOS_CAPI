@@ -1,6 +1,6 @@
 /************************************************************************
  *
- * $Id: geos_c.h.in 2582 2009-06-16 00:04:28Z pramsey $
+ * $Id: geos_c.h.in 2742 2009-11-26 18:29:56Z warmerdam $
  *
  * C-Wrapper for GEOS library
  *
@@ -30,10 +30,10 @@
 #define GEOS_C_H_INCLUDED
 
 #ifndef __cplusplus
-#include <stddef.h> /* for size_t definition */
-#else 
-#include <cstddef> 
-using std::size_t; 
+# include <stddef.h> /* for size_t definition */
+#else
+# include <cstddef>
+using std::size_t;
 #endif
 
 #ifdef __cplusplus
@@ -47,36 +47,37 @@ extern "C" {
  ***********************************************************************/
 
 /*
- *  * Following 'ifdef' hack fixes problem with generating geos_c.h on Windows,
- *   * when building with Visual C++ compiler.
- *    */
+ * Following 'ifdef' hack fixes problem with generating geos_c.h on Windows,
+ * when building with Visual C++ compiler.
+ *
+ */
 #if defined(_MSC_VER)
 #include <geos/version.h>
 #define GEOS_CAPI_VERSION_MAJOR 1
 #define GEOS_CAPI_VERSION_MINOR 6
 #define GEOS_CAPI_VERSION_PATCH 0
-#define GEOS_CAPI_VERSION "3.1.1-CAPI-1.6.0"
+#define GEOS_CAPI_VERSION "3.2.0-CAPI-1.6.0"
 #else
 #ifndef GEOS_VERSION_MAJOR
 #define GEOS_VERSION_MAJOR 3
 #endif
 #ifndef GEOS_VERSION_MINOR
-#define GEOS_VERSION_MINOR 1
+#define GEOS_VERSION_MINOR 2
 #endif
 #ifndef GEOS_VERSION_PATCH
-#define GEOS_VERSION_PATCH 1
+#define GEOS_VERSION_PATCH 0
 #endif
 #ifndef GEOS_VERSION
-#define GEOS_VERSION "3.1.1"
+#define GEOS_VERSION "3.2.0"
 #endif
 #ifndef GEOS_JTS_PORT
-#define GEOS_JTS_PORT "1.7.1"
+#define GEOS_JTS_PORT "1.10.0"
 #endif
 
 #define GEOS_CAPI_VERSION_MAJOR 1
 #define GEOS_CAPI_VERSION_MINOR 6
 #define GEOS_CAPI_VERSION_PATCH 0
-#define GEOS_CAPI_VERSION "3.1.1-CAPI-1.6.0"
+#define GEOS_CAPI_VERSION "3.2.0-CAPI-1.6.0"
 #endif
 
 #define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR 
@@ -100,6 +101,7 @@ typedef void (*GEOSMessageHandler)(const char *fmt, ...);
 typedef struct GEOSGeom_t GEOSGeometry;
 typedef struct GEOSPrepGeom_t GEOSPreparedGeometry;
 typedef struct GEOSCoordSeq_t GEOSCoordSequence;
+typedef struct GEOSSTRtree_t GEOSSTRtree;
 #endif
 
 /* Those are compatibility definitions for source compatibility
@@ -132,17 +134,15 @@ enum GEOSByteOrders {
 
 typedef struct GEOSContextHandle_HS *GEOSContextHandle_t;
 
+typedef void (*GEOSQueryCallback)(void *item, void *userdata);
+
 /************************************************************************
  *
  * Initialization, cleanup, version
  *
  ***********************************************************************/
 
-#if defined(_MSC_VER)
-#  define GEOS_DLL     __declspec(dllexport)
-#else
-#  define GEOS_DLL
-#endif
+#include <geos/export.h>
 
 extern void GEOS_DLL initGEOS(GEOSMessageHandler notice_function,
 	GEOSMessageHandler error_function);
@@ -320,6 +320,86 @@ extern int GEOS_DLL GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t handle,
 
 /************************************************************************
  *
+ *  Linearref functions -- there are more, but these two are probably
+ *  sufficient for most purposes
+ *
+ ***********************************************************************/
+
+/* 
+ * GEOSGeometry ownership is retained by caller
+ */
+
+
+extern double GEOS_DLL GEOSProject(const GEOSGeometry *g,
+                                   const GEOSGeometry* p);
+extern double GEOS_DLL GEOSProject_r(GEOSContextHandle_t handle,
+                                     const GEOSGeometry *g,
+                                     const GEOSGeometry *p);
+
+extern GEOSGeometry GEOS_DLL *GEOSInterpolate(const GEOSGeometry *g,
+                                              double d);
+extern GEOSGeometry GEOS_DLL *GEOSInterpolate_r(GEOSContextHandle_t handle,
+                                                const GEOSGeometry *g,
+                                                double d);
+
+extern double GEOS_DLL GEOSProjectNormalized(const GEOSGeometry *g,
+                                             const GEOSGeometry* p);
+extern double GEOS_DLL GEOSProjectNormalized_r(GEOSContextHandle_t handle,
+                                               const GEOSGeometry *g,
+                                               const GEOSGeometry *p);
+
+extern GEOSGeometry GEOS_DLL *GEOSInterpolateNormalized(const GEOSGeometry *g,
+                                                        double d);
+extern GEOSGeometry GEOS_DLL *GEOSInterpolateNormalized_r(
+                                                GEOSContextHandle_t handle,
+                                                const GEOSGeometry *g,
+                                                double d);
+
+/************************************************************************
+ *
+ * Buffer related functions
+ *
+ ***********************************************************************/
+
+enum GEOSBufCapStyles {
+	GEOSBUF_CAP_ROUND=1,
+	GEOSBUF_CAP_FLAT=2,
+	GEOSBUF_CAP_SQUARE=3
+};
+
+enum GEOSBufJoinStyles {
+	GEOSBUF_JOIN_ROUND=1,
+	GEOSBUF_JOIN_MITRE=2,
+	GEOSBUF_JOIN_BEVEL=3
+};
+
+/* These functions return NULL on exception. */
+extern GEOSGeometry GEOS_DLL *GEOSBuffer(const GEOSGeometry* g1,
+	double width, int quadsegs);
+extern GEOSGeometry GEOS_DLL *GEOSBuffer_r(GEOSContextHandle_t handle,
+                                           const GEOSGeometry* g1,
+                                           double width, int quadsegs);
+
+/* These functions return NULL on exception. */
+extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle(const GEOSGeometry* g1,
+	double width, int quadsegs, int endCapStyle, int joinStyle,
+	double mitreLimit);
+extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle_r(GEOSContextHandle_t handle,
+	const GEOSGeometry* g1, double width, int quadsegs, int endCapStyle,
+	int joinStyle, double mitreLimit);
+
+/* These functions return NULL on exception. Only LINESTRINGs are accepted. */
+extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer(const GEOSGeometry* g1,
+	double width, int quadsegs, int joinStyle, double mitreLimit,
+	int leftSide);
+extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer_r(
+	GEOSContextHandle_t handle,
+	const GEOSGeometry* g1, double width, int quadsegs, 
+	int joinStyle, double mitreLimit, int leftSide);
+
+
+/************************************************************************
+ *
  * Geometry Constructors.
  * GEOSCoordSequence* arguments will become ownership of the returned object.
  * All functions return NULL on exception.
@@ -384,8 +464,6 @@ extern void GEOS_DLL GEOSGeom_destroy_r(GEOSContextHandle_t handle,
 
 extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSIntersection(const GEOSGeometry* g1, const GEOSGeometry* g2);
-extern GEOSGeometry GEOS_DLL *GEOSBuffer(const GEOSGeometry* g1,
-	double width, int quadsegs);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSDifference(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSSymDifference(const GEOSGeometry* g1,
@@ -403,9 +481,6 @@ extern GEOSGeometry GEOS_DLL *GEOSEnvelope_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSIntersection_r(GEOSContextHandle_t handle,
                                                  const GEOSGeometry* g1,
                                                  const GEOSGeometry* g2);
-extern GEOSGeometry GEOS_DLL *GEOSBuffer_r(GEOSContextHandle_t handle,
-                                           const GEOSGeometry* g1,
-                                           double width, int quadsegs);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSDifference_r(GEOSContextHandle_t handle,
@@ -515,7 +590,7 @@ extern char GEOS_DLL GEOSEqualsExact_r(GEOSContextHandle_t handle,
  ***********************************************************************/
 
 /* 
- * Argument ownership is taken by prepared geometry
+ * GEOSGeometry ownership is retained by caller
  */
 extern const GEOSPreparedGeometry GEOS_DLL *GEOSPrepare(const GEOSGeometry* g);
 
@@ -526,6 +601,9 @@ extern char GEOS_DLL GEOSPreparedContainsProperly(const GEOSPreparedGeometry* pg
 extern char GEOS_DLL GEOSPreparedCovers(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedIntersects(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 
+/* 
+ * GEOSGeometry ownership is retained by caller
+ */
 extern const GEOSPreparedGeometry GEOS_DLL *GEOSPrepare_r(
                                             GEOSContextHandle_t handle,
                                             const GEOSGeometry* g);
@@ -545,6 +623,57 @@ extern char GEOS_DLL GEOSPreparedCovers_r(GEOSContextHandle_t handle,
 extern char GEOS_DLL GEOSPreparedIntersects_r(GEOSContextHandle_t handle,
                                               const GEOSPreparedGeometry* pg1,
                                               const GEOSGeometry* g2);
+
+/************************************************************************
+ *
+ *  STRtree functions
+ *
+ ***********************************************************************/
+
+/* 
+ * GEOSGeometry ownership is retained by caller
+ */
+
+extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create(size_t nodeCapacity);
+extern void GEOS_DLL GEOSSTRtree_insert(GEOSSTRtree *tree,
+                                        const GEOSGeometry *g,
+                                        void *item);
+extern void GEOS_DLL GEOSSTRtree_query(GEOSSTRtree *tree,
+                                       const GEOSGeometry *g,
+                                       GEOSQueryCallback callback,
+                                       void *userdata);
+extern void GEOS_DLL GEOSSTRtree_iterate(GEOSSTRtree *tree,
+                                       GEOSQueryCallback callback,
+                                       void *userdata);
+extern char GEOS_DLL GEOSSTRtree_remove(GEOSSTRtree *tree,
+                                        const GEOSGeometry *g,
+                                        void *item);
+extern void GEOS_DLL GEOSSTRtree_destroy(GEOSSTRtree *tree);
+
+
+extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create_r(
+                                    GEOSContextHandle_t handle,
+                                    size_t nodeCapacity);
+extern void GEOS_DLL GEOSSTRtree_insert_r(GEOSContextHandle_t handle,
+                                          GEOSSTRtree *tree,
+                                          const GEOSGeometry *g,
+                                          void *item);
+extern void GEOS_DLL GEOSSTRtree_query_r(GEOSContextHandle_t handle,
+                                         GEOSSTRtree *tree,
+                                         const GEOSGeometry *g,
+                                         GEOSQueryCallback callback,
+                                         void *userdata);
+extern void GEOS_DLL GEOSSTRtree_iterate_r(GEOSContextHandle_t handle,
+                                       GEOSSTRtree *tree,
+                                       GEOSQueryCallback callback,
+                                       void *userdata);
+extern char GEOS_DLL GEOSSTRtree_remove_r(GEOSContextHandle_t handle,
+                                          GEOSSTRtree *tree,
+                                          const GEOSGeometry *g,
+                                          void *item);
+extern void GEOS_DLL GEOSSTRtree_destroy_r(GEOSContextHandle_t handle,
+                                           GEOSSTRtree *tree);
+
 
 /************************************************************************
  *
@@ -591,14 +720,13 @@ extern int GEOS_DLL GEOSGeomTypeId_r(GEOSContextHandle_t handle,
                                      const GEOSGeometry* g1);
 
 /* Return 0 on exception */
-extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g1);
-
-extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int srid);
-
+extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g);
 extern int GEOS_DLL GEOSGetSRID_r(GEOSContextHandle_t handle,
-                                  const GEOSGeometry* g1);
+                                  const GEOSGeometry* g);
 
-extern void GEOS_DLL GEOSSetSRID_r(GEOSContextHandle_t handle, GEOSGeometry* g, int srid);
+extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
+extern void GEOS_DLL GEOSSetSRID_r(GEOSContextHandle_t handle,
+                                   GEOSGeometry* g, int SRID);
 
 /* May be called on all geometries in GEOS 3.x, returns -1 on error and 1
  * for non-multi geometries. Older GEOS versions only accept 
@@ -606,10 +734,10 @@ extern void GEOS_DLL GEOSSetSRID_r(GEOSContextHandle_t handle, GEOSGeometry* g, 
  * when feeded simple geometries, so beware if you need compatibility with
  * old GEOS versions.
  */
-extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeometry* g1);
+extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeometry* g);
 
 extern int GEOS_DLL GEOSGetNumGeometries_r(GEOSContextHandle_t handle,
-                                           const GEOSGeometry* g1);
+                                           const GEOSGeometry* g);
 
 /*
  * Return NULL on exception, Geometry must be a Collection.
@@ -674,6 +802,7 @@ extern const GEOSCoordSequence GEOS_DLL *GEOSGeom_getCoordSeq_r(
 
 /*
  * Return 0 on exception (or empty geometry)
+ * See also GEOSCoordSeq_getDimensions 
  */
 extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeometry* g);
 
@@ -691,7 +820,10 @@ extern int GEOS_DLL GEOSArea(const GEOSGeometry* g1, double *area);
 extern int GEOS_DLL GEOSLength(const GEOSGeometry* g1, double *length);
 extern int GEOS_DLL GEOSDistance(const GEOSGeometry* g1, const GEOSGeometry* g2,
 	double *dist);
-
+extern int GEOS_DLL GEOSHausdorffDistance(const GEOSGeometry *g1,
+        const GEOSGeometry *g2, double *dist);
+extern int GEOS_DLL GEOSHausdorffDistanceDensify(const GEOSGeometry *g1,
+        const GEOSGeometry *g2, double densifyFrac, double *dist);
 extern int GEOS_DLL GEOSArea_r(GEOSContextHandle_t handle,
                                const GEOSGeometry* g1, double *area);
 extern int GEOS_DLL GEOSLength_r(GEOSContextHandle_t handle,
@@ -699,6 +831,14 @@ extern int GEOS_DLL GEOSLength_r(GEOSContextHandle_t handle,
 extern int GEOS_DLL GEOSDistance_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry* g1,
                                    const GEOSGeometry* g2, double *dist);
+extern int GEOS_DLL GEOSHausdorffDistance_r(GEOSContextHandle_t handle,
+                                   const GEOSGeometry *g1,
+                                   const GEOSGeometry *g2,
+                                   double *dist);
+extern int GEOS_DLL GEOSHausdorffDistanceDensify_r(GEOSContextHandle_t handle,
+                                   const GEOSGeometry *g1,
+                                   const GEOSGeometry *g2,
+                                   double densifyFrac, double *dist);
 
 
 /************************************************************************
@@ -768,7 +908,7 @@ extern GEOSWKBWriter GEOS_DLL *GEOSWKBWriter_create_r(
 extern void GEOS_DLL GEOSWKBWriter_destroy_r(GEOSContextHandle_t handle,
                                              GEOSWKBWriter* writer);
 
-/* The owner owns the results for these two methods! */
+/* The caller owns the results for these two methods! */
 extern unsigned char GEOS_DLL *GEOSWKBWriter_write(GEOSWKBWriter* writer, const GEOSGeometry* g, size_t *size);
 extern unsigned char GEOS_DLL *GEOSWKBWriter_writeHEX(GEOSWKBWriter* writer, const GEOSGeometry* g, size_t *size);
 
