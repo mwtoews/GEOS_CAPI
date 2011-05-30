@@ -1,25 +1,53 @@
-Changes in 3.2.3
-2011-09-21
+Changes in 3.3.0
+2011-05-30
 
+- New things:
+  - CAPI: GEOSBufferWithParams (allows single sided buffers)
+  - CAPI: GEOSOffsetCurve deprecates GEOSSingleSidedBuffer
+  - CAPI: GEOSUnaryUnion deprecates GEOSCascadedUnion
+  - CAPI: GEOSisValidDetail: tell state, reason & location apart. allows
+          passing flags.
+  - CAPI: GEOSContext_setNoticeHandler_r, GEOSContext_setErrorHandler_r
+  - CAPI: GEOSGeom_createEmptyPoint, GEOSGeom_createEmptyLineString
+          GEOSGeom_createEmptyPolygon, GEOSGeom_createEmptyCollection
+  - CAPI: GEOSGeom_extractUniquePoints
+  - CAPI: GEOSGetGeometryN support for single geometries
+  - CAPI: GEOSPolygonize_full to return all informations computed by
+          the polygonizer
+  - CAPI: GEOSOrientationIndex
+  - CAPI: GEOSSharedPaths to find shared paths and their orientation
+  - CAPI: GEOSSnap 
+  - CAPI: GEOSRelatePatternMatch 
+  - CAPI: GEOSCovers, GEOSCoveredBy (#396) 
+  - CAPI: GEOSRelateBoundaryNodeRule (#399) 
+  -  PHP: new PHP5 bindings based on CAPI
+- Semantic C++ API changes:
+  - Geometry inheritance chain changed to introduce Puntal, Lineal
+    and Polygonal classes (virtual inheritance introduced)
+  - Polygonizer::getInvalidRingLines retains ownership of vector elements
+  - Geometry::isWithinDistance method is now const
+  - Polygonizer::getCutEdges returns by const ref
+  - Polygonizer::getDangles returns by const ref
+  - Empty LinearRings are closed by definition
 - Bug fixes / improvements
-  - ValidOp abort in presence of 2 touching holes forming an island (#449)
-  - DistanceOp segfaults on MULTIPOLYGON with EMPTY elements (#367)
-  - RobustDeterminant is not robust (#450)
-  - Fix out-of-place build for python binding (#332)
-  - Fix LinearReferencing functions segfault (#353)
-
-Changes in 3.2.2
- 
-- Bug fixes:
-  - CAPI: do not leak contexts when using the non-reentrant interface
-
-Changes in 3.2.1 
-
-- Bug fixes:
-  - False positive return from IsValidOp (#333)
+  - Fixed Geometry.distance() and DistanceOp to return 0.0 for empty inputs
+  - Invalid compound geometries reported as valid (#333)
   - Return up to 15 digits of precision from GEOSisValidReason_t (#329)
+  - CAPI: do not leak contexts when using the non-reentrant interface
+  - Fix duplicated dangles returned by Polygonizer
+  - Fix SnapIfNeededOverlayOp to throw the originating exception
+  - Fixed LineMerger to skip lines with only a single unique coordinate
+  - Fix NodedSegmentString to handle zero-length line segments correctly
+    (via safeOctant)
+  - Fixed buffer OffsetCurveSetBuilder to handle "flat" rings correctly
+  - Added illegal state check in LineSegment::pointAlongOffset() 
+  - Improved performance of RectangleIntersects by always using
+    segment-scanning and refining SegmentIntersectionTester
+  - Reduce memory use in PreparedGeometry predicates (#342)
+  - Fix infinite loop in RobustDeterminant with nan/inf input (#357)
 
 Changes in 3.2.0 
+2009-12-14
 
 - Add Single-sided buffer operation
 - JTS-1.10 sync ...
@@ -46,6 +74,7 @@ Changes in 3.1.0
 - Easier builds under MSVC and OpenSolaris
 - Thread-safe CAPI option
 - IsValidReason added to CAPI
+- GEOSPolygonizer_getCutEdges added to CAPI
 - CascadedUnion operation for fast unions of geometry sets
 - Numerous bug fixes.
   http://trac.osgeo.org/geos/query?status=closed&milestone=3.1.0&order=priority
