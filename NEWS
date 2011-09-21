@@ -1,3 +1,13 @@
+Changes in 3.2.3
+2011-09-21
+
+- Bug fixes / improvements
+  - ValidOp abort in presence of 2 touching holes forming an island (#449)
+  - DistanceOp segfaults on MULTIPOLYGON with EMPTY elements (#367)
+  - RobustDeterminant is not robust (#450)
+  - Fix out-of-place build for python binding (#332)
+  - Fix LinearReferencing functions segfault (#353)
+
 Changes in 3.2.2
  
 - Bug fixes:
