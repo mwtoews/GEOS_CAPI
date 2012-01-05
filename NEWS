@@ -1,3 +1,22 @@
+Changes in 3.3.2
+2012-01-05
+
+- Bug fixes / improvements
+    - Fix CMAKE_CXX_FLAGS overriding -std=gnu++0x (#489)
+    - Missing versions update in CMake configuration (#490)
+    - Fix noding of self-intersecting lines through UnaryUnion (#482)
+    - Fix handling of collapsed edges skipping in BufferOp (#494)
+    - Print up to 18 digits of precision for TopologyException points
+    - Fix noding with reduced precision in Buffer operation (#473)
+    - Fix HotPixel original point invalidation (#498)
+    - Fix CascadedPolygonUnion to discard non-polygonal components (#499)
+    - Improve buffer robustness by reverting to non-snaprounding noder (#495)
+    - Fix C++11 build by avoiding std::pair<auto_ptr> (#491)
+    - Add --clibs to geos-config and GEOS_C_LIBS to geos.m4 (#497)
+    - Apply shoelace formula for area calculation (#485)
+    - Fix default initialization issue for clang (#500)
+    - Improve overlay robustness by fixing areal validity on snapping (#488)
+
 Changes in 3.3.1
 2011-09-27
 
@@ -35,6 +54,8 @@ Changes in 3.3.0
   - CAPI: GEOSRelatePatternMatch 
   - CAPI: GEOSCovers, GEOSCoveredBy (#396) 
   - CAPI: GEOSRelateBoundaryNodeRule (#399) 
+  - CAPI: GEOSGeom_getCoordinateDimension() (#311)
+  - CAPI: GEOSWKTWriter_setOutputDimension, GEOSWKTWriter_setOld3D (#292)
   -  PHP: new PHP5 bindings based on CAPI
 - Semantic C++ API changes:
   - Geometry inheritance chain changed to introduce Puntal, Lineal
