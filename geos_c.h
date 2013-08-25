@@ -58,8 +58,8 @@ extern "C" {
 #include <geos/version.h>
 #define GEOS_CAPI_VERSION_MAJOR 1
 #define GEOS_CAPI_VERSION_MINOR 8
-#define GEOS_CAPI_VERSION_PATCH 0
-#define GEOS_CAPI_VERSION "3.4.0-CAPI-1.8.0"
+#define GEOS_CAPI_VERSION_PATCH 2
+#define GEOS_CAPI_VERSION "3.4.2-CAPI-1.8.2"
 #else
 #ifndef GEOS_VERSION_MAJOR
 #define GEOS_VERSION_MAJOR 3
@@ -68,10 +68,10 @@ extern "C" {
 #define GEOS_VERSION_MINOR 4
 #endif
 #ifndef GEOS_VERSION_PATCH
-#define GEOS_VERSION_PATCH 1
+#define GEOS_VERSION_PATCH 2
 #endif
 #ifndef GEOS_VERSION
-#define GEOS_VERSION "3.4.1"
+#define GEOS_VERSION "3.4.2"
 #endif
 #ifndef GEOS_JTS_PORT
 #define GEOS_JTS_PORT "1.12.0"
@@ -79,8 +79,8 @@ extern "C" {
 
 #define GEOS_CAPI_VERSION_MAJOR 1
 #define GEOS_CAPI_VERSION_MINOR 8
-#define GEOS_CAPI_VERSION_PATCH 0
-#define GEOS_CAPI_VERSION "3.4.1-CAPI-1.8.0"
+#define GEOS_CAPI_VERSION_PATCH 2
+#define GEOS_CAPI_VERSION "3.4.2-CAPI-1.8.2"
 #endif
 
 #define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR
