@@ -1,3 +1,20 @@
+Changes in 3.5.0
+2015-08-15
+
+- New things:
+  - Voronoi API (#627)
+  - PHP: Geometry->normalize method
+  - GEOS_USE_ONLY_R_API macro support (#695)
+  - PHP: WKBReader->read() & WKBWriter::write() methods (Benjamin Morel)
+  - GEOSClipByRect (#699, Mika Heiskanen, Sandro Santilli)
+  - CAPI: thread-safe message handling API (#663, Pepijn Van Eeckhoudt)
+- Improvements:
+  - Speed-up intersection and difference between geometries
+    with small bounding box overlap.
+  - CAPI: add MULTILINESTRING support for GEOSisClosed (Benjamin Morel)
+- C++ API changes:
+  - Added no-parameter CoordinateSequenceFactory::create method (Sandro Mani)
+
 Changes in 3.4.2
 2013-08-25
 
@@ -6,7 +23,10 @@ Changes in 3.4.2
     should fix 32-bit regression failures (#652)
   - isnan workaround OS detection missing NetBSD, DragonFly, Sun nuance (#650)
   - Do not distribute platform.h and version.h, but install both (#601)
-  - Non-standard ChangeLog file in 3.4.0 and 3.4.1 releases (#654) 	
+  - Non-standard ChangeLog file in 3.4.0 and 3.4.1 releases (#654) 
+  - new travis bot (#657)
+  - accept multiple Nan representations (#656)
+		
 
 Changes in 3.4.1
 2013-08-17
@@ -61,7 +81,7 @@ Changes in 3.4.0
   - Fix EMPTY return from single-point lines and zero-length polygons (#612)
   - CMakeLists.txt, tools/geos_svn_revision_cmake.h.in: Add
 	  geos_svn_revision.h generator to CMake config (#643)
-	- Makefile.vc 'clean' step leaks obj files (#607)
+	- Makefile.vc 'clean' step leaks obj files (#607) 
   
 Changes in 3.3.8
 2013-02-28
