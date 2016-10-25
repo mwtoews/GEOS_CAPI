@@ -1,3 +1,16 @@
+Changes in 3.5.1
+2015-10-25
+
+- Bug fixes / improvements
+  - Fix CMake configuration to allow build from released sources package (#753)
+  - Fix memory leaks in single-sided buffers (#747), PlanarGraph and tests
+  - Fix GeometryEditor to correctly update factory of empty geometries (#749)
+  - Fix snapping of last segment of a closed linestring (#758)
+  - Fix memory exhaustion case in isvalid (#757)
+  - Fix Windows build with Visual Studio 2008 (#766)
+  - Fix incorrect return from prepared multipoint intersects (#764)
+  - Fix build against GCC 3.5.0+ (#784)
+
 Changes in 3.5.0
 2015-08-15
 
@@ -82,6 +95,22 @@ Changes in 3.4.0
   - CMakeLists.txt, tools/geos_svn_revision_cmake.h.in: Add
 	  geos_svn_revision.h generator to CMake config (#643)
 	- Makefile.vc 'clean' step leaks obj files (#607) 
+
+Changes in 3.3.9
+2013-09-04
+
+- Bug fixes / improvements
+    - Fix OffsetCurve op in presence of duplicated vertices (#602)
+    - Fix LineSegmentVisitor copy ctor (#636)
+    - Fix area boundary return from GEOSPointOnSurface (#623)
+    - Speedup GEOSWKBReader_read (#621)
+    - Fix RobustLineIntersector handling of invalid intersection points (#622)
+    - Reduce likelyhood of invalid output from snap operation (#629, #501)
+    - Reduce memory fragmentation of prepared Polygon/Point intersection op
+    - Fix mingw64 compile (#630)
+    - Fix bug in HotPixel constructor (#635)
+    - Fix install location of linearref headers (#624)
+    - Fix multi-geometry constructor to drop SRID from components (#583)
   
 Changes in 3.3.8
 2013-02-28
@@ -524,4 +553,3 @@ Changes in 2.0.0
   been dropped. You have to use GeometryFactory instead.
 - WKTWriter default constructor has been dropped. You need
   to initialize it with an explicit GeometryFactory
-
