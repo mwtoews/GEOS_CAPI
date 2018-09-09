@@ -1,25 +1,67 @@
-Changes in 3.6.3
+3.7.0 changes
+2018-09-10
+- New things:
+  - CAPI: GEOSDistanceIndexed (#795, Dan Baston)
+  - CAPI: GEOSCoordSeq_isCCW (#870, Dan Baston)
+  - CAPI: GEOSGeom_getXMin, GEOSGeom_getXMax,
+          GEOSGeom_getYMin, GEOSGeom_getYMax (#871, Dan Baston)
+  - CAPI: GEOSFrechetDistance (#797, Shinichi SUGIYAMA)
+  - CAPI: GEOSReverse (#872, Dan Baston)
+  - CAPI: GEOSGeomGetZ (#581, J Smith)
+
+- Improvements
+  - Interruptible snap operation (Paul Ramsey)
+  - Numerous packaging, doc, and build changes
+    (Debian group: Bas Couwenberg, Francesco Paolo Lovergine)
+    (NetBSD: Greg Troxel)
+  - Allow static library with C API for CMake builds (#878, Dakota Hawkins)
+
+- C++ API changes:
+  - Require defining USE_UNSTABLE_GEOS_CPP_API for use without
+    warnings.
+  - Make C++11 required (Mateusz Loskot)
+  - Use C++11 unique_ptr, nullptr, and override constructs
+    (Mateusz Loskot)
+  - C++11 standard delete on noncopyable
+    (#851, Vicky Vergara)
+  - Fix CommonBits::getBit to correctly handle i >= 32
+    (#834, Kurt Schwehr)
+
+
+Changes in 3.7.0rc2
+2018-09-03
+Fixes / enhancements since 3.7.0rc1
+  - Drop ? from extended regular expression,
+    so that the expression strictly conforms to the POSIX ERE rules.
+    (#917, Greg Troxel, Bas Couwenberg)
+  - include .editorconfig in tar ball,
+    fixes Cmake on VS (#920, Jeff Mckenna, Regina Obe)
+  - Ignore error in CoordinateArraySequenceFactoryTest
+    failing on FreeBSD/macOS Clang (#894)
+
+Changes in 3.7.0rc1
+2018-08-19
+Fixes / enhancements since 3.7.0beta2
+  - Avoid segfault when querying empty tree (#730, framm)
+  - Collection with Empty components crashes overlay (#782, Dan Baston)
+  - Allow static library with C API for CMake builds (#878, Dakota Hawkins)
+
+
+Changes in 3.7.0beta2
 2018-08-06
+Fixes since 3.7.0beta1
+  - Fix infinite loop in GEOSClipByRect (#865, Dan Baston)
+  - Make GEOSException inherit from std::runtime_error
+    to address clang warnings (Dan Baston)
+  - Add missing CMake files to tarball (#895, Regina Obe)
 
-- Bug fixes / improvements
-  - Include all CMake files in release (#753)
-  - Remove BOM from source files, restoring support for GCC-4.9 (#846)
-  - Fix memory leak in GEOSSTRtree_nearest_r (#874, Dan Baston)
+Changes in 3.7.0beta1
+2018-06-25
+See 3.7.0 latest notes
 
-Changes in 3.6.2
-2017-07-25
-
-- Bug fixes / improvements
-  - Fix exception in UnaryUnion of collection of touching polygons (#837)
-  - Allow building against python 3 (#774)
-  - Fix build with android-ndk and other compilers (#799)
-  - Allows compiling with -Wpointer-bool-conversion (#638)
-  - Fix unhandled exception on invalid fp operation (#811)
-  - Fix overloaded virtual print in DirectedEdge* (#812)
-  - AppVeyor CI build added (#813)
-  - Clean up numerous MSVC warnings, notably C4275 and C4589 (#814)
-  - Bump CMake version to 3.0.0 (#817)
-  - Fix leaks in WKT parser (#830)
+Changes in 3.7.0alpha
+2018-06-14
+See 3.7.0 notes
 
 Changes in 3.6.1
 2016-12-24
@@ -232,7 +274,7 @@ Changes in 3.3.1
   - Fix memory leak on invalid geometry in InteriorPointArea (#475)
   - ValidOp abort in presence of 2 touching holes forming an island (#449)
   - Enable prepared intersects operation for points
-  - Fortify suspicious code found by static analisys tools
+  - Fortify suspicious code found by static analysis tools
   - Fix for SOLARIS build (#461)
   - Fix EMPTY result from GEOSOffsetCurve with distance 0 (#454)
   - Fix Geometry::clone to copy SRID (#464)
