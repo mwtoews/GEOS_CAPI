@@ -70,10 +70,10 @@ extern "C" {
 #define GEOS_VERSION_MINOR 7
 #endif
 #ifndef GEOS_VERSION_PATCH
-#define GEOS_VERSION_PATCH 0
+#define GEOS_VERSION_PATCH 1
 #endif
 #ifndef GEOS_VERSION
-#define GEOS_VERSION "3.7.0"
+#define GEOS_VERSION "3.7.1"
 #endif
 #ifndef GEOS_JTS_PORT
 #define GEOS_JTS_PORT "1.13.0"
@@ -81,8 +81,8 @@ extern "C" {
 
 #define GEOS_CAPI_VERSION_MAJOR 1
 #define GEOS_CAPI_VERSION_MINOR 11
-#define GEOS_CAPI_VERSION_PATCH 0
-#define GEOS_CAPI_VERSION "3.7.0-CAPI-1.11.0"
+#define GEOS_CAPI_VERSION_PATCH 1
+#define GEOS_CAPI_VERSION "3.7.1-CAPI-1.11.1"
 #endif
 
 #define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR
@@ -1066,7 +1066,7 @@ extern int GEOS_DLL GEOSGetNumInteriorRings_r(GEOSContextHandle_t handle,
 extern int GEOS_DLL GEOSGeomGetNumPoints_r(GEOSContextHandle_t handle,
                                        const GEOSGeometry* g);
 
-/* Return -1 on exception, Geometry must be a Point. */
+/* Return 0 on exception, otherwise 1, Geometry must be a Point. */
 extern int GEOS_DLL GEOSGeomGetX_r(GEOSContextHandle_t handle, const GEOSGeometry *g, double *x);
 extern int GEOS_DLL GEOSGeomGetY_r(GEOSContextHandle_t handle, const GEOSGeometry *g, double *y);
 extern int GEOS_DLL GEOSGeomGetZ_r(GEOSContextHandle_t handle, const GEOSGeometry *g, double *z);
@@ -1991,7 +1991,7 @@ extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeometry* g);
 /* Return -1 on exception, Geometry must be a LineString. */
 extern int GEOS_DLL GEOSGeomGetNumPoints(const GEOSGeometry* g);
 
-/* Return -1 on exception, Geometry must be a Point. */
+/* Return 0 on exception, otherwise 1, Geometry must be a Point. */
 extern int GEOS_DLL GEOSGeomGetX(const GEOSGeometry *g, double *x);
 extern int GEOS_DLL GEOSGeomGetY(const GEOSGeometry *g, double *y);
 extern int GEOS_DLL GEOSGeomGetZ(const GEOSGeometry *g, double *z);
